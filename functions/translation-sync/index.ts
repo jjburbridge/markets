@@ -15,9 +15,9 @@ export const handler = documentEventHandler(async ({context, event}) => {
       id: _id,
     },
   )
-  console.log({translationsIds})
-  const {navigation: navigationAfter} = after
-  const {navigation: navigationBefore} = before
+  console.log({translationsIds, before, after})
+  const navigationAfter = after?.navigation
+  const navigationBefore = before?.navigation
 
   if (JSON.stringify(navigationBefore) === JSON.stringify(navigationAfter)) {
     console.log('No changes to navigation')
@@ -26,9 +26,13 @@ export const handler = documentEventHandler(async ({context, event}) => {
 
   const navigationAfterKeys = navigationAfter.map((item, index) => ({key: item._key, index}))
 
-  const translatedDocs = await client.fetch(`*[_id in $ids]{_id, navigation}`, {
-    ids: translationsIds,
-  })
+  const translatedDocs = await client.fetch(
+    `*[_id in $ids]{_id, navigation}`,
+    {
+      ids: translationsIds,
+    },
+    {perspective: 'drafts'},
+  )
   console.log({translatedDocs})
   const patches = translatedDocs.map((translation) => {
     const {navigation: translatedNavigation} = translation

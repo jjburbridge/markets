@@ -35,7 +35,6 @@ export default defineType({
           type: 'object',
           components: {
             item: ArrayItem,
-            // input: ConditionalArray,
           },
           fields: [{type: 'string', name: 'internal'}],
         },
