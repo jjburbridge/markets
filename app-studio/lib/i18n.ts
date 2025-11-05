@@ -13,4 +13,10 @@ export const SCHEMA_ITEMS: (SchemaItem | SchemaDivider)[] = [
   {kind: 'list', schemaType: `person`, title: 'People'},
   {kind: 'divider'},
   {kind: 'list', schemaType: `page`, title: 'Pages'},
+  {kind: 'divider'},
+  {kind: 'list', schemaType: `post`, title: 'Posts'},
+  {kind: 'list', schemaType: `author`, title: 'Authors'},
+  {kind: 'list', schemaType: `category`, title: 'Categories'},
+  // {kind: 'list', schemaType: `blockContent`, title: 'Block Content'},
+  // {kind: 'list', schemaType: `locale`, title: 'Locales'},
 ]

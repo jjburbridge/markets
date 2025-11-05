@@ -1,0 +1,53 @@
+import { configs as js } from '@eslint/js'
+import prettier from 'eslint-config-prettier'
+import { configs as react } from 'eslint-plugin-react'
+import reactHooks, { configs as hooks } from 'eslint-plugin-react-hooks'
+import globals from 'globals'
+import ts from 'typescript-eslint'
+
+export default [
+  js.recommended,
+  react.flat.recommended,
+  ...ts.configs.recommended,
+  {
+    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+  {
+    plugins: {
+      'react-hooks': reactHooks,
+    },
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+      ...hooks.recommended.rules,
+    },
+  },
+  {
+    ignores: ['node_modules/', 'dist/', 'build/'],
+  },
+  {
+    rules: {
+      'prefer-template': 'warn',
+      'react/display-name': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+    },
+  },
+  prettier,
+]
