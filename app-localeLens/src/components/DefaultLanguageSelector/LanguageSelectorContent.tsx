@@ -1,56 +1,12 @@
-import { useClient } from "@sanity/sdk-react";
-import { use, useMemo, useState } from "react";
+import { useState } from "react";
 import { useApp } from "../../contexts/AppContext";
 import LocaleFallbackMessage from "../LocaleFallbackMessage";
 
-// Cache for promises to prevent multiple requests
-const languagesCache = new Map<string, Promise<any>>();
-
-const projectId = process.env.SANITY_APP_PROJECT_ID;
-const dataset = process.env.SANITY_APP_DATASET;
-
-// Custom hook that throws a promise for Suspense and updates context
-const useLanguages = () => {
-  const { getLanguages, setLanguages } = useApp();
-  const client = useClient({
-    projectId,
-    dataset,
-    apiVersion: "vX",
-  });
-
-  // Create a cache key based on client config
-  const cacheKey = `${client.config().projectId}-${client.config().dataset}`;
-
-  // Create a promise that will be thrown and caught by Suspense
-  const languagesPromise = useMemo(() => {
-    // Check if we already have a promise for this client
-    if (!languagesCache.has(cacheKey)) {
-      const promise = getLanguages(client).then((languages) => {
-        // Update the context with the fetched languages
-        setLanguages(languages);
-        return languages;
-      });
-      languagesCache.set(cacheKey, promise);
-
-      // Clean up the cache entry if the promise rejects
-      promise.catch(() => {
-        languagesCache.delete(cacheKey);
-      });
-    }
-
-    return languagesCache.get(cacheKey)!;
-  }, [client, getLanguages, setLanguages, cacheKey]);
-
-  // This will throw the promise if it's not resolved yet
-  return use(languagesPromise);
-};
-
 // Component that uses the Suspense hook
 const LanguageSelectorContent = () => {
-  const languages = useLanguages();
-  const { defaultLanguage, setDefaultLanguage } = useApp();
+  // const languages = useLanguages();
+  const { defaultLanguage, setDefaultLanguage, languages } = useApp();
   const [isOpen, setIsOpen] = useState(false);
-  console.log("languages", languages);
   // Show fallback message if no languages are found
   if (!languages || languages.length === 0) {
     return (
@@ -74,7 +30,8 @@ const LanguageSelectorContent = () => {
       {/* Current language display with change button */}
       <div className="flex items-center gap-2">
         <span className="text-sm font-medium">
-          Current Locale: &quot;{currentLanguage?.id || "Select Language"}&quot;
+          Current Locale: &quot;{currentLanguage?.title || "Select Language"}
+          &quot;
         </span>
         {/* <button
           onClick={() => setIsOpen(!isOpen)}

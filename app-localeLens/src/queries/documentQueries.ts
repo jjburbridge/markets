@@ -1,4 +1,7 @@
-import { defineQuery } from 'groq';
+import { defineQuery } from "groq";
+import { uniqueLanguagesObject } from "../../markets";
+
+const languageCount = uniqueLanguagesObject.length;
 
 export const DOCUMENT_PREVIEW_QUERY = defineQuery(`{
   _createdAt,
@@ -25,7 +28,7 @@ export const DOCUMENT_PREVIEW_QUERY = defineQuery(`{
     count(*[
       _type == "translation.metadata"
       && references(^._id)
-    ].translations[].value) == count(*[_type == "locale"]) => "fully translated",
+    ].translations[].value) == ${languageCount} => "fully translated",
     true => "partial"
   ),
 }`);
@@ -57,11 +60,10 @@ export const DOCUMENT_DETAIL_QUERY = defineQuery(`{
     count(*[
       _type == "translation.metadata"
       && references(^._id)
-    ].translations[].value) == count(*[_type == "locale"]) => "fully translated",
+    ].translations[].value) == ${languageCount} => "fully translated",
     true => "partial"
   ),
 }`);
-
 
 export const BATCH_DOCUMENT_PREVIEW_QUERY = defineQuery(`{
   _id,

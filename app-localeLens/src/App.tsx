@@ -3,9 +3,10 @@ import { SanityApp } from "@sanity/sdk-react";
 import "./App.css";
 import SanityUI from "./SanityUI";
 import DefaultLanguageSelector from "./components/DefaultLanguageSelector";
+import DefaultMarketSelector from "./components/DefaultMarketSelector";
 import Documents from "./components/Documents";
 import { AppContextProvider } from "./contexts/AppContext";
-import { uniqueLanguagesObject } from "../markets";
+import { MARKETS, uniqueLanguagesObject } from "../markets";
 
 const projectId = process.env.SANITY_APP_PROJECT_ID;
 const dataset = process.env.SANITY_APP_DATASET;
@@ -50,8 +51,10 @@ function App() {
     //   }
     // },
     supportedLanguages: uniqueLanguagesObject,
+    supportedMarkets: MARKETS,
     // this is the default language
     defaultLanguage: "en",
+    defaultMarket: "CA",
 
     // Required
     // Translations UI will only appear on these schema types
@@ -63,6 +66,7 @@ function App() {
       <SanityUI>
         <AppContextProvider config={config}>
           <SanityApp config={sanityConfigs} fallback={<div>Loading...</div>}>
+            <DefaultMarketSelector />
             <DefaultLanguageSelector />
             <Documents />
           </SanityApp>
