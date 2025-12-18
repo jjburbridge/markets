@@ -1,0 +1,23 @@
+{
+  "_createdAt": "2025-12-15T15:54:09Z",
+  "_id": "b00f1646-e548-4ada-8c40-ee9f5f245802",
+  "_rev": "LXrGWxIWiYL0luyp35OpGL",
+  "_type": "collectionSync",
+  "_updatedAt": "2025-12-15T15:54:24Z",
+  "baseLanguage": "en",
+  "language": "en",
+  "links": [
+    {
+      "_key": "65b375927dca",
+      "_ref": "09cc2688-4e2f-4475-9afa-d1583ade57a2",
+      "_type": "link"
+    },
+    {
+      "_key": "d0c92226309c",
+      "_ref": "e098dc1f-24b3-48ce-9954-0e417ed24eb5",
+      "_type": "link"
+    }
+  ],
+  "market": "US",
+  "title": "top"
+}

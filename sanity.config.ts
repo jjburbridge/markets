@@ -1,4 +1,4 @@
-import {defineConfig} from 'sanity'
+import {defineConfig, useClient} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
@@ -11,6 +11,7 @@ import {SCHEMA_ITEMS} from './lib/i18n'
 import {schemaTemplates} from './lib/schemaTemplate'
 import {structure} from './lib/structure'
 import {assist} from '@sanity/assist'
+import {uniqueId} from 'lodash'
 
 const pluginsBase = (marketName?: string) => {
   const market = MARKETS.find((m) => m.name === marketName)
@@ -61,6 +62,37 @@ const pluginsBase = (marketName?: string) => {
   return base
 }
 
+const CreateChildAction = (props: any) => {
+  const client = useClient({apiVersion: '2025-05-08'})
+
+  console.log(props)
+  let newDoc = {}
+  if (props.draft) {
+    newDoc = {
+      ...props.draft,
+      title: `${props.draft.title} - Child`,
+    }
+  } else if (props.published) {
+    newDoc = {
+      ...props.published,
+      title: `${props.published.title} - Child`,
+    }
+  }
+
+  newDoc._id = `drafts.${uniqueId()}`
+  newDoc.parentCollection = {
+    _ref: props.draft?._id || props.published?._id,
+    _type: 'reference',
+  }
+
+  return {
+    label: 'Create Child',
+    onHandle: async (handleProps: any) => {
+      await client.create(newDoc)
+    },
+  }
+}
+
 // Shared config across all "market" configs
 // Some elements are overwritten in the market-specific configs
 const configBase = {
@@ -74,6 +106,9 @@ const configBase = {
     templates: (prev) => schemaTemplates(prev),
   },
   plugins: pluginsBase(),
+  document: {
+    actions: [CreateChildAction],
+  },
 }
 
 export default defineConfig([

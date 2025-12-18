@@ -1081,7 +1081,7 @@
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.27.6.tgz#ec4070a04d76bae8ddbb10770ba55714a417b7c6"
   integrity sha512-vbavdySgbTTrmFE+EsiqUTzlOr5bzlnJtUv9PynGCAKvfQqjIXbvFdumPM/GxMDfyuGMJaJAU6TO4zc1Jf1i8Q==
 
-"@babel/runtime@^7.27.6":
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.27.6":
   version "7.28.4"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.28.4.tgz#a70226016fabe25c5783b2f22d3e1c9bc5ca3326"
   integrity sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==
@@ -2820,7 +2820,7 @@
     get-it "^8.6.7"
     rxjs "^7.0.0"
 
-"@sanity/client@^7.13.0", "@sanity/client@^7.13.2", "@sanity/client@^7.2.1", "@sanity/client@^7.9.0":
+"@sanity/client@^7.12.0", "@sanity/client@^7.13.0", "@sanity/client@^7.13.2", "@sanity/client@^7.2.1", "@sanity/client@^7.9.0":
   version "7.13.2"
   resolved "https://registry.yarnpkg.com/@sanity/client/-/client-7.13.2.tgz#c7975653eb05def1e22b4e58f7b6fe14246fd1f4"
   integrity sha512-bXuQGWgrpkSInZy8lfCMmOgdTNpsoZ7PORW0+zXss8qVpNo1DC002l1c8to6kfxNF0OaL9v7LwsPqKcTZ/VWrw==
@@ -2980,6 +2980,11 @@
     json-stream-stringify "^3.1.6"
     p-queue "^9.0.1"
     rimraf "^6.1.2"
+
+"@sanity/functions@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@sanity/functions/-/functions-1.1.0.tgz#4fe06f8141ed313e72173bc776eaf3eb9cee4c01"
+  integrity sha512-JLDjuxuCO043Jc6aqtDPyHly6bZl9XqkF3gnIO/ViL43UK32g9z3krmqcJRHYBrLVg+bm6WjActQv8ZfZPmXHw==
 
 "@sanity/generate-help-url@^3.0.0":
   version "3.0.0"
@@ -3236,6 +3241,22 @@
     lodash "^4.17.21"
     object-inspect "^1.13.4"
 
+"@sanity/sdk-react@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@sanity/sdk-react/-/sdk-react-2.3.1.tgz#89c0422cdf071c1d04fc415f296535598029fa32"
+  integrity sha512-kDZc6w1ZebDHZZZ/CNxSFPYsuWK8LkBu1cTEaue0bZGQumTbHeUYW2OMSRrKSlFYIi1SU3kfJSzEvv8wDugYaA==
+  dependencies:
+    "@sanity/client" "^7.12.0"
+    "@sanity/message-protocol" "^0.12.0"
+    "@sanity/sdk" "2.3.1"
+    "@sanity/types" "^3.83.0"
+    "@types/lodash-es" "^4.17.12"
+    groq "3.88.1-typegen-experimental.0"
+    lodash-es "^4.17.21"
+    react-compiler-runtime "19.1.0-rc.2"
+    react-error-boundary "^5.0.0"
+    rxjs "^7.8.2"
+
 "@sanity/sdk@2.1.2":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@sanity/sdk/-/sdk-2.1.2.tgz#0becc5093480e8cdd754e72560c83e8215686133"
@@ -3251,6 +3272,27 @@
     "@sanity/mutate" "^0.12.4"
     "@sanity/types" "^3.83.0"
     groq "3.88.1-typegen-experimental.0"
+    lodash-es "^4.17.21"
+    reselect "^5.1.1"
+    rxjs "^7.8.2"
+    zustand "^5.0.4"
+
+"@sanity/sdk@2.3.1", "@sanity/sdk@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@sanity/sdk/-/sdk-2.3.1.tgz#feda8364a16aa909b914b273edf78192033547c9"
+  integrity sha512-+A5UCsRqBjc9xjYscqSRqes3X8+p8iO73yPQY76dBKSk06uJq+z7C1UHx0tH5tZVAmSwBgDnisXVaJZRu08+6w==
+  dependencies:
+    "@sanity/bifur-client" "^0.4.1"
+    "@sanity/client" "^7.12.0"
+    "@sanity/comlink" "^3.0.4"
+    "@sanity/diff-match-patch" "^3.2.0"
+    "@sanity/diff-patch" "^6.0.0"
+    "@sanity/json-match" "^1.0.5"
+    "@sanity/message-protocol" "^0.12.0"
+    "@sanity/mutate" "^0.12.4"
+    "@sanity/types" "^3.83.0"
+    groq "3.88.1-typegen-experimental.0"
+    groq-js "^1.19.0"
     lodash-es "^4.17.21"
     reselect "^5.1.1"
     rxjs "^7.8.2"
@@ -3557,6 +3599,18 @@
   version "7.0.15"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.15.tgz#596a1747233694d50f6ad8a7869fcb6f56cf5841"
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
+
+"@types/lodash-es@^4.17.12":
+  version "4.17.12"
+  resolved "https://registry.yarnpkg.com/@types/lodash-es/-/lodash-es-4.17.12.tgz#65f6d1e5f80539aa7cfbfc962de5def0cf4f341b"
+  integrity sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.21.tgz#b806831543d696b14f8112db600ea9d3a1df6ea4"
+  integrity sha512-FOvQ0YPD5NOfPgMzJihoT+Za5pdkDJWcbpuj1DjaKZIr/gxodQjY/uWEFlTNqW2ugXHUiL8lRQgw63dzKHZdeQ==
 
 "@types/minimist@^1.2.0":
   version "1.2.5"
@@ -5997,6 +6051,13 @@ graphemer@^1.4.0:
   resolved "https://registry.yarnpkg.com/graphemer/-/graphemer-1.4.0.tgz#fb2f1d55e0e3a1849aeffc90c4fa0dd53a0e66c6"
   integrity sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==
 
+groq-js@^1.19.0:
+  version "1.24.0"
+  resolved "https://registry.yarnpkg.com/groq-js/-/groq-js-1.24.0.tgz#58c70dda2f9bb2baf14b059a64fa0f1958eeef6c"
+  integrity sha512-lQe6UCCFmraajJrvfBouwaRacL5l2+ZNBoqZHRVe1F3sCq8mApMFOP9vIT3JfWZsG4sRxP8dACr/D8oJzltZ4g==
+  dependencies:
+    debug "^4.3.4"
+
 groq-js@^1.21.0, groq-js@^1.23.0:
   version "1.23.0"
   resolved "https://registry.yarnpkg.com/groq-js/-/groq-js-1.23.0.tgz#354f91d01d7271f04057c1d42c940ddbc29ba669"
@@ -8059,6 +8120,13 @@ react-dom@^19.2.3:
   integrity sha512-yELu4WmLPw5Mr/lmeEpox5rw3RETacE++JgHqQzd2dg+YbJuat3jH4ingc+WPZhxaoFzdv9y33G+F7Nl5O0GBg==
   dependencies:
     scheduler "^0.27.0"
+
+react-error-boundary@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-error-boundary/-/react-error-boundary-5.0.0.tgz#6b6c7e075c922afb0283147e5b084efa44e68570"
+  integrity sha512-tnjAxG+IkpLephNcePNA7v6F/QpWLH8He65+DmedchDwg162JZqx4NmbXj0mlAYVVEd81OW7aFhmbsScYfiAFQ==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
 
 react-fast-compare@^3.2.2:
   version "3.2.2"
