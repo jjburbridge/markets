@@ -9,7 +9,11 @@ export const schemaTemplates = (prev) => [
     title: `${schemaItem.title} with Market`,
     type: 'initialValueTemplateItem',
     schemaType: schemaItem.schemaType,
-    parameters: [{name: `market`, title: `Market`, type: `string`}],
-    value: ({market}) => ({market}),
+    parameters: [
+      {name: `market`, title: `Market`, type: `string`},
+      {name: `language`, title: `Language`, type: `string`},
+      {name: `baseLanguage`, title: `Base Language`, type: `string`},
+    ],
+    value: ({market, language}) => ({market, language, baseLanguage: language}),
   })),
 ]

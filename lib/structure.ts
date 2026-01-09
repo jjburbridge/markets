@@ -64,7 +64,7 @@ const createSchemaItemChildren = (S: StructureBuilder, schemaItem: SchemaItem, m
           // And one for no set language
           createSchemaItemList(S, schemaItem, market, null),
         ])
-    : createSchemaItemChild(S, schemaItem, market, null, itemTitle)
+    : createSchemaItemChild(S, schemaItem, market, market.languages[0], itemTitle)
 }
 
 const createSchemaItemChild = (

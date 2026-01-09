@@ -10,6 +10,7 @@ import {MARKETS, uniqueLanguagesObject} from './lib/markets'
 import {SCHEMA_ITEMS} from './lib/i18n'
 import {schemaTemplates} from './lib/schemaTemplate'
 import {structure} from './lib/structure'
+import {assist} from '@sanity/assist'
 
 const pluginsBase = (marketName?: string) => {
   const market = MARKETS.find((m) => m.name === marketName)
@@ -23,7 +24,15 @@ const pluginsBase = (marketName?: string) => {
     // Used for field-level translation in some schemas
     internationalizedArray({
       languages: market ? market.languages : [],
-      fieldTypes: ['string'],
+      fieldTypes: ['string', 'richText'],
+    }),
+    assist({
+      translate: {
+        field: {
+          documentTypes: ['home'],
+          languages: market ? market.languages : [],
+        },
+      },
     }),
   ]
 

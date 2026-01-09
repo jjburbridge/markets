@@ -1,9 +1,13 @@
 import {defineField, defineType} from 'sanity'
+import {WhereElse} from '../component/WhereElse'
 
 export default defineType({
   name: 'page',
   title: 'Page',
   type: 'document',
+  components: {
+    input: WhereElse,
+  },
   fields: [
     defineField({
       name: 'title',
@@ -17,13 +21,14 @@ export default defineType({
       options: {
         source: 'title',
         maxLength: 100,
+        isUnique: () => true, // create your own uniqueness validator here - this just ignores the check.
       },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'content',
       title: 'Content',
-      type: 'array',
-      of: [{type: 'block'}],
+      type: 'internationalizedArrayRichText',
     }),
     defineField({
       name: 'language',
@@ -32,10 +37,21 @@ export default defineType({
       readOnly: true,
     }),
     defineField({
+      name: 'baseLanguage',
+      title: 'Base Language',
+      type: 'string',
+      readOnly: true,
+    }),
+    defineField({
       name: 'market',
       title: 'Market',
       type: 'string',
       readOnly: true,
+    }),
+    defineField({
+      name: 'seo',
+      title: 'SEO',
+      type: 'seo',
     }),
   ],
 })
