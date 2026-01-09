@@ -1,0 +1,94 @@
+name: List Sanity Migrations
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'migrations/**'
+
+jobs:
+  list-migrations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: List migrations
+        id: migrations
+        env:
+          SANITY_STUDIO_SANITY_PROJECT_ID: ${{ secrets.SANITY_STUDIO_SANITY_PROJECT_ID }}
+          SANITY_STUDIO_SANITY_DATASET: ${{ secrets.SANITY_STUDIO_SANITY_DATASET }}
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+        run: |
+          # Run migration list command and capture output
+          # Try JSON format first, fallback to regular output
+          MIGRATION_OUTPUT=$(npx sanity migration list --json 2>/dev/null || npx sanity migration list 2>&1)
+
+          echo "Raw migration output:"
+          echo "$MIGRATION_OUTPUT"
+
+          # Initialize empty array
+          MIGRATION_IDS="[]"
+
+          # Try to parse as JSON first
+          if echo "$MIGRATION_OUTPUT" | jq empty 2>/dev/null; then
+            echo "Parsing as JSON..."
+            # JSON output format - extract IDs from various possible fields
+            MIGRATION_IDS=$(echo "$MIGRATION_OUTPUT" | jq -r '[.[] | .id // ._id // .migrationId // empty] | map(select(. != null and . != "")) | unique')
+          else
+            echo "Parsing as text..."
+            # Text output format - extract UUIDs (migration IDs are typically UUIDs)
+            EXTRACTED_IDS=$(echo "$MIGRATION_OUTPUT" | grep -oE '[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}' | sort -u)
+            if [ -n "$EXTRACTED_IDS" ]; then
+              MIGRATION_IDS=$(echo "$EXTRACTED_IDS" | jq -R -s -c 'split("\n") | map(select(length > 0)) | unique')
+            fi
+          fi
+
+          # If still no IDs found, try extracting from local migration files
+          if [ "$MIGRATION_IDS" == "[]" ] || [ -z "$MIGRATION_IDS" ]; then
+            echo "No IDs found in CLI output, checking local migration files..."
+            # This is a fallback - list local migration directories
+            LOCAL_MIGRATIONS=$(find migrations -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | jq -R -s -c 'split("\n") | map(select(length > 0))')
+            if [ "$LOCAL_MIGRATIONS" != "[]" ]; then
+              echo "Found local migrations: $LOCAL_MIGRATIONS"
+              # Note: These are directory names, not migration IDs from Sanity
+            fi
+          fi
+
+          echo "migration_ids=$MIGRATION_IDS" >> $GITHUB_OUTPUT
+          echo "Migration IDs found: $MIGRATION_IDS"
+
+      - name: Save migration IDs to file
+        run: |
+          echo "${{ steps.migrations.outputs.migration_ids }}" > migration-ids.json
+          cat migration-ids.json
+
+      - name: Upload migration IDs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: migration-ids
+          path: migration-ids.json
+          retention-days: 30
+
+      - name: Summary
+        run: |
+          echo "## Migration IDs" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo '${{ steps.migrations.outputs.migration_ids }}' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
