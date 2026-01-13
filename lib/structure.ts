@@ -45,6 +45,13 @@ const createSchemaItem = (
         )
         .title(schemaItem.title)
         .child(createSchemaItemChildren(S, schemaItem, market))
+    case 'singleton':
+      return S.listItem().title(schemaItem.title).id(schemaItem.schemaType).child(
+        // Instead of rendering a list of documents, we render a single
+        // document, specifying the `documentId` manually to ensure
+        // that we're editing the single instance of the document
+        S.document().schemaType(schemaItem.schemaType).documentId(schemaItem.schemaType),
+      )
     default:
       return null
   }
