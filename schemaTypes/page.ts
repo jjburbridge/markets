@@ -28,13 +28,17 @@ export default defineType({
     defineField({
       name: 'content',
       title: 'Content',
-      type: 'internationalizedArrayRichText',
+      type: 'richText',
     }),
     defineField({
       name: 'language',
       title: 'Language',
       type: 'string',
       readOnly: true,
+    }),
+    defineField({
+      name: 'pdf',
+      type: 'file',
     }),
     defineField({
       name: 'baseLanguage',

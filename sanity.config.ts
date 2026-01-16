@@ -101,6 +101,9 @@ const configBase = {
   projectId: process.env.SANITY_STUDIO_SANITY_PROJECT_ID as string,
   dataset: process.env.SANITY_STUDIO_SANITY_DATASET as string,
   title: process.env.SANITY_STUDIO_SANITY_PROJECT_TITLE || 'Marketing.',
+  mediaLibrary: {
+    enabled: true,
+  },
   schema: {
     types: schemaTypes,
     templates: (prev) => schemaTemplates(prev),
