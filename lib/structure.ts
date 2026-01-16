@@ -7,8 +7,10 @@ import {SchemaSingleton} from './i18n'
 import {SCHEMA_ITEMS} from './i18n'
 
 // Create Items for all Markets
-const createAllMarketItems = (S: StructureBuilder, config: ConfigContext) =>
-  MARKETS.map((market) => createMarketItem(S, config, market))
+const createAllMarketItems = (S: StructureBuilder, config: ConfigContext) => [
+  ...MARKETS.map((market) => createMarketItem(S, config, market)),
+  createMarketItem(S, config, {name: 'all', title: 'All', languages: []}),
+]
 
 // Create an Item for a market
 const createMarketItem = (S: StructureBuilder, config: ConfigContext, market: Market) =>
@@ -86,6 +88,14 @@ const createSchemaItemChild = (
     languageQuery = ``
   }
 
+  if (market.name === 'all') {
+    return S.documentTypeList(schemaItem.schemaType)
+      .title(itemTitle)
+      .filter(`_type == $schemaType`)
+      .params({
+        schemaType: schemaItem.schemaType,
+      })
+  }
   return S.documentTypeList(schemaItem.schemaType)
     .title(itemTitle)
     .filter(
