@@ -1,7 +1,8 @@
 import groq from 'groq'
 import {ArrayFieldProps, getPublishedId, useFormValue} from 'sanity'
 import {SanityApp, useQuery, type SanityConfig} from '@sanity/sdk-react'
-import {Suspense} from 'react'
+import {ComponentType, Suspense} from 'react'
+import { ReferenceChildLinkProps, usePaneRouter } from 'sanity/structure'
 
 const config: SanityConfig = {
   studioMode: {
@@ -43,7 +44,17 @@ const query = groq`*[_type == "collection" && _id == $id][0]{
   }
 }`
 
+const Link = ({link, ReferenceChildLink}: {link: any, ReferenceChildLink: ComponentType<ReferenceChildLinkProps>}) => {
+
+  return (
+    <div>
+      <ReferenceChildLink documentId={link._id} documentType={link._type} parentRefPath={[]}> {link.title} </ReferenceChildLink>
+    </div>
+  )
+}
+
 const Parents = ({id}: {id: string}) => {
+  const {ReferenceChildLink} = usePaneRouter()
   const {data} = useQuery({query: query, params: {id: id}, perspective: 'drafts'})
   console.log({query, id, data})
 
@@ -81,7 +92,7 @@ const Parents = ({id}: {id: string}) => {
       <div>Parents</div>
       <Suspense fallback={<div>Loading...</div>}>
         {filteredLinks.map((link: any) => (
-          <div key={link._id}>{link.title}</div>
+          <Link key={link._id} link={link} ReferenceChildLink={ReferenceChildLink} />
         ))}
       </Suspense>
     </div>
