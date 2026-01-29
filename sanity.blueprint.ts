@@ -18,6 +18,6 @@ export default defineBlueprint({
         projection: '{_id, _type, "before": before(), "after": after()}',
       },
     }),
-    defineDocumentFunction({name: 'scrape', event: {on: ['create']}}),
+    defineDocumentFunction({name: 'scrape', timeout: 900, event: {on: ['create']}}),
   ],
 })
