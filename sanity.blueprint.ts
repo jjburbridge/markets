@@ -11,5 +11,20 @@ export default defineBlueprint({
       },
     }),
     defineDocumentFunction({name: 'scrape', event: {on: ['create']}}),
+    defineDocumentFunction({
+      name: 'comments-notification',
+      event: {
+        on: ['create', 'update'],
+        resource: {
+          type: 'dataset',
+          id: `${process.env.SANITY_STUDIO_SANITY_PROJECT_ID}.${process.env.SANITY_STUDIO_SANITY_DATASET}`,
+        },
+        filter: '_type == "comment" && count(message[].children[_type == "mention"]) > 0',
+        projection: '{..., "mentions":message[].children[_type == "mention"]}',
+      },
+      env: {
+        KNOCK_API_KEY: process.env.KNOCK_API_KEY as string,
+      },
+    }),
   ],
 })
