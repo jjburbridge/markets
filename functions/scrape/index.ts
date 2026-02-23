@@ -1,57 +1,70 @@
-import {documentEventHandler} from '@sanity/functions'
+
 import Parser from 'rss-parser'
 import {createClient} from '@sanity/client'
 import {convert} from 'html-to-text'
 
-export const handler = documentEventHandler(async ({context}) => {
+export const handler = (async () => {
   try {
     const parser = new Parser()
-    const time = new Date().toLocaleTimeString()
-    console.log(`👋 Your Sanity Function was called at ${time}`)
 
     const RSS_URL = `https://feeds.bbci.co.uk/news/rss.xml`
 
     const data = await parser.parseURL(RSS_URL)
     // console.log(data)
     const client = createClient({
-      ...context.clientOptions,
+      projectId: process.env.SANITY_STUDIO_SANITY_PROJECT_ID as string,
+      dataset: process.env.SANITY_STUDIO_SANITY_DATASET as string,
       apiVersion: 'vX',
-      perspective: 'drafts',
+      perspective: 'drafts', // use drafts perspective to get unpublished content to avoid duplicates
     })
 
     let filteredItems: any[] = []
-    const lastPubDate = await client.fetch('*[_type == "page" && defined(pubDate)]{_id, pubDate} | order(pubDate desc)[0]')
+    // get the last published page by pubDate
+    const lastPubDate = await client.fetch(
+      '*[_type == "page" && defined(pubDate)]{_id, pubDate} | order(pubDate desc)[0]',
+    )
     if (lastPubDate) {
       const lastPubDateDate = new Date(lastPubDate.pubDate)
+      // filter the items to only include items that are newer than the last published page
       filteredItems = data.items.filter((item) => {
-        return (item.pubDate && new Date(item.pubDate) > lastPubDateDate)
+        return item.pubDate && new Date(item.pubDate) > lastPubDateDate
       })
     }
 
     // Process items in batches to throttle requests
     const batchSize = 3
-    const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-    
+    const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
     const results = []
-    
+
     for (let i = 0; i < filteredItems.length; i += batchSize) {
       const batch = filteredItems.slice(i, i + batchSize)
-      
-      const batchPromises = batch.map(async (item) => {
-        if (!item.link) return;
 
+      const batchPromises = batch.map(async (item) => {
+        if (!item.link) return
+
+        // get the id of the document from the link - a deterministic value to ensure that we don't create duplicate documents
         const id = new URL(item.link).pathname.split('/').pop() as string
-        const document = await client.getDocument(id,{includeAllVersions:true})
-        if (document.length > 0) {  
+        // check if the document already exists
+        const document = await client.getDocument(id, {includeAllVersions: true})
+        if (document.length > 0) {
           console.log('Document already exists')
           return
         }
+        //get the content of the article
         const article = await fetch(item.link)
         const articleText = await article.text()
-      
+
+        // convert the html from the main setction to text with html-to-text
         const options = {baseElements: {selectors: ['main']}}
         const convertedText = convert(articleText, options)
-        // console.log(convertedText)
+
+
+        /** 
+         * use sanity agent actions to take the content from the article and create a new page document in the style of a pirate. 
+         * Ensure that the document is created with the correct pubDate and _id is deterministic to avoid duplicates.
+         * */
+
         const result = await client.agent.action.generate({
           schemaId: '_.schemas.US',
           targetDocument: {
@@ -62,7 +75,7 @@ export const handler = documentEventHandler(async ({context}) => {
               pubDate: new Date(item.pubDate as string),
             },
           },
-          instruction: 'summarize $article',
+          instruction: 'summarize in the style of a pirate $article',
           instructionParams: {
             article: convertedText,
           },
@@ -70,10 +83,10 @@ export const handler = documentEventHandler(async ({context}) => {
         // console.log(result)
         return result
       })
-      
+
       const batchResults = await Promise.all(batchPromises)
       results.push(...batchResults)
-      
+
       // Add delay between batches (except for the last batch)
       if (i + batchSize < filteredItems.length) {
         await delay(3000) // 3 second delay between batches

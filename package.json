@@ -36,6 +36,7 @@
     "@sanity/blueprints": "0.7.1",
     "@sanity/eslint-config-studio": "^6.0.0",
     "@sanity/functions": "1.1.0",
+    "@types/html-to-text": "^9.0.4",
     "@types/react": "^19.2.9",
     "eslint": "^9.39.2",
     "prettier": "^3.8.0",
