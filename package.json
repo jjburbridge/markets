@@ -31,8 +31,6 @@
     "styled-components": "^6.3.6"
   },
   "devDependencies": {
-    "dotenv": "^16.4.5",
-    "tsx": "^4.19.0",
     "@sanity/blueprints": "0.7.1",
     "@sanity/eslint-config-studio": "^6.0.0",
     "@sanity/functions": "1.1.0",
