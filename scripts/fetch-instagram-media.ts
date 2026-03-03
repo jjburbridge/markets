@@ -2,9 +2,7 @@
 /**
  * Fetches media from Instagram's me/media endpoint.
  *
- * Requires INSTAGRAM_ACCESS_TOKEN. Load from .secrets (KEY=value format):
- *   echo 'INSTAGRAM_ACCESS_TOKEN=your_token' >> .secrets
- *   yarn fetch:instagram
+ * Requires INSTAGRAM_ACCESS_TOKEN.
  *
  * For Facebook Login API, set INSTAGRAM_API_HOST=https://graph.facebook.com
  * and optionally INSTAGRAM_USER_ID (otherwise /me/media is used).
@@ -19,11 +17,7 @@
  * @see https://developers.facebook.com/docs/instagram-platform/reference/instagram-media#fields
  */
 
-import {config} from 'dotenv'
 import {createClient} from '@sanity/client'
-
-// Load .secrets if it exists (gitignored)
-config({path: '.secrets'})
 
 const API_VERSION = 'v25.0'
 const DEFAULT_HOST = 'https://graph.instagram.com'
@@ -86,12 +80,23 @@ interface InstagramMediaItem {
 async function fetchMediaPage(
   mediaEndpoint: string,
   accessToken: string,
+  sinceTimestamp: string | null,
   url?: string,
 ): Promise<InstagramMediaResponse> {
-  const fetchUrl =
-    url ||
-    `${mediaEndpoint}?fields=${encodeURIComponent(MEDIA_FIELDS)}&access_token=${accessToken}&limit=25`
-  const res = await fetch(fetchUrl)
+  let fetchUrl
+  if (!url) {
+    fetchUrl = new URL(mediaEndpoint)
+    fetchUrl.searchParams.set('fields', MEDIA_FIELDS)
+    fetchUrl.searchParams.set('access_token', accessToken)
+    fetchUrl.searchParams.set('limit', '25')
+    if (sinceTimestamp) {
+      fetchUrl.searchParams.set('since', sinceTimestamp)
+    }
+  } else {
+    fetchUrl = url
+  }
+
+  const res = await fetch(fetchUrl.toString())
   if (!res.ok) {
     const err = await res.text()
     throw new Error(`Instagram API error ${res.status}: ${err}`)
@@ -100,19 +105,15 @@ async function fetchMediaPage(
 }
 
 function getSanityClient() {
-  const projectId =
-    process.env.SANITY_PROJECT_ID || process.env.SANITY_STUDIO_SANITY_PROJECT_ID
-  const dataset =
-    process.env.SANITY_DATASET || process.env.SANITY_STUDIO_SANITY_DATASET
-  const token = process.env.SANITY_API_TOKEN
+  const projectId = process.env.SANITY_PROJECT_ID || process.env.SANITY_STUDIO_SANITY_PROJECT_ID
+  const dataset = process.env.SANITY_DATASET || process.env.SANITY_STUDIO_SANITY_DATASET
+  const token = process.env.SANITY_AUTH_TOKEN
 
   if (!projectId || !dataset) {
     throw new Error('Sanity config missing: SANITY_PROJECT_ID, SANITY_DATASET')
   }
   if (!token) {
-    throw new Error(
-      'SANITY_API_TOKEN required for writing. Create a token at sanity.io/manage.',
-    )
+    throw new Error('SANITY_API_TOKEN required for writing. Create a token at sanity.io/manage.')
   }
 
   return createClient({
@@ -124,7 +125,9 @@ function getSanityClient() {
   })
 }
 
-async function getMostRecentTimestamp(client: ReturnType<typeof createClient>): Promise<string | null> {
+async function getMostRecentTimestamp(
+  client: ReturnType<typeof createClient>,
+): Promise<string | null> {
   const result = await client.fetch<{timestamp: string} | null>(
     `*[_type == "instagramMedia" && defined(timestamp)] | order(timestamp desc)[0]{timestamp}`,
   )
@@ -132,9 +135,7 @@ async function getMostRecentTimestamp(client: ReturnType<typeof createClient>): 
 }
 
 function omitUndefined<T extends Record<string, unknown>>(obj: T): T {
-  return Object.fromEntries(
-    Object.entries(obj).filter(([, v]) => v !== undefined),
-  ) as T
+  return Object.fromEntries(Object.entries(obj).filter(([, v]) => v !== undefined)) as T
 }
 
 function toSanityDocument(item: InstagramMediaItem): Record<string, unknown> {
@@ -182,8 +183,12 @@ async function saveToSanity(
     const children = item.children?.data
     if (children?.length) {
       for (const child of children) {
-        const childDoc = toSanityChildDocument(child) as {_id: string; _type: string; [k: string]: unknown}
-        await client.createOrReplace(childDoc)
+        const childDoc = toSanityChildDocument(child) as {
+          _id: string
+          _type: string
+          [k: string]: unknown
+        }
+        await client.createOrReplace(childDoc, {autoGenerateArrayKeys: true})
         saved++
       }
     }
@@ -194,7 +199,7 @@ async function saveToSanity(
         _ref: `instagramMedia-${c.id}`,
       }))
     }
-    await client.createOrReplace(doc)
+    await client.createOrReplace(doc, {autoGenerateArrayKeys: true})
     saved++
   }
   return saved
@@ -210,24 +215,9 @@ async function fetchMediaNewerThan(
   let nextUrl: string | undefined
 
   for (let page = 0; page < maxPages; page++) {
-    const result = await fetchMediaPage(mediaEndpoint, accessToken, nextUrl)
-    const items = result.data || []
-    let shouldStop = false
-
-    for (const item of items) {
-      const ts = item.timestamp
-      if (!ts) {
-        all.push(item)
-        continue
-      }
-      if (sinceTimestamp && ts <= sinceTimestamp) {
-        shouldStop = true
-        break
-      }
-      all.push(item)
-    }
-
-    if (shouldStop || !result.paging?.next) break
+    const result = await fetchMediaPage(mediaEndpoint, accessToken, sinceTimestamp, nextUrl)
+    all.push(...result.data)
+    if (!result.paging?.next) break
     nextUrl = result.paging.next
   }
 

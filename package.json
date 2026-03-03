@@ -10,7 +10,7 @@
     "build": "sanity build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
-    "fetch:instagram": "tsx scripts/fetch-instagram-media.ts"
+    "fetch:instagram": "sanity exec scripts/fetch-instagram-media.ts"
   },
   "keywords": [
     "sanity"
