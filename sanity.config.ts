@@ -1,6 +1,7 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
+import {userSelect} from 'sanity-plugin-user-select-input'
 import {schemaTypes} from './schemaTypes'
 
 import {documentInternationalization} from '@sanity/document-internationalization'
@@ -17,6 +18,7 @@ const pluginsBase = (marketName?: string) => {
 
   // Shared plugins across all "market" configs
   const base = [
+    userSelect(),
     structureTool({
       structure: (S, context) => structure(S, context, marketName),
     }),

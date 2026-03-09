@@ -1,0 +1,9 @@
+{
+  "name": "authorised-users-sync",
+  "type": "module",
+  "main": "index.ts",
+  "dependencies": {
+    "@sanity/client": "^7.16.0",
+    "@sanity/functions": "1.2.1"
+  }
+}

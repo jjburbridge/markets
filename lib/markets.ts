@@ -8,6 +8,7 @@ const markets = [
     name: `US`,
     title: `USA`,
     languages: [{id: `en`, title: `English`}],
+    tag: `us-brand`,
   },
   {
     flag: `🇨🇦`,
@@ -17,12 +18,14 @@ const markets = [
       {id: `en`, title: `English`},
       {id: `fr`, title: `French`},
     ],
+    tag: `ca-brand`,
   },
   {
     flag: `🇬🇧`,
     name: `UK`,
     title: `United Kingdom`,
     languages: [{id: `en`, title: `English`}],
+    tag: `uk-brand`,
   },
   {
     flag: `🇮🇳`,
@@ -32,6 +35,7 @@ const markets = [
       {id: `en`, title: `English`},
       {id: `hi`, title: `Hindi`},
     ],
+    tag: `in-brand`,
   },
   {
     flag: `🇯🇵`,
@@ -41,6 +45,7 @@ const markets = [
       {id: `jp`, title: `Japanese`},
       {id: `en`, title: `English`},
     ],
+    tag: `jp-brand`,
   },
 ]
 
@@ -52,7 +57,8 @@ export type Market = {
   name: string
   flag: string
   title: string
-  languages: Language[]
+  languages: Language[] 
+  tag: string
 }
 
 export const MARKETS: Market[] = markets

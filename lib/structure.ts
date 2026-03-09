@@ -3,13 +3,12 @@ import {StructureBuilder} from 'sanity/structure'
 import {Language, Market, MARKETS} from './markets'
 import {SchemaDivider} from './i18n'
 import {SchemaItem} from './i18n'
-import {SchemaSingleton} from './i18n'
 import {SCHEMA_ITEMS} from './i18n'
 
 // Create Items for all Markets
 const createAllMarketItems = (S: StructureBuilder, config: ConfigContext) => [
   ...MARKETS.map((market) => createMarketItem(S, config, market)),
-  createMarketItem(S, config, {name: 'all', title: 'All', languages: []}),
+  createMarketItem(S, config, {name: 'all', title: 'All', languages: [], tag: '', flag: '🌍'}),
 ]
 
 // Create an Item for a market
@@ -32,7 +31,7 @@ const createAllSchemaItems = (S: StructureBuilder, config: ConfigContext, market
 // Create a schema item for this market for this schema type
 const createSchemaItem = (
   S: StructureBuilder,
-  schemaItem: SchemaItem | SchemaSingleton | SchemaDivider,
+  schemaItem: SchemaItem | SchemaDivider,
   market: Market,
 ) => {
   switch (schemaItem.kind) {
@@ -118,6 +117,7 @@ const createSchemaItemChild = (
       S.initialValueTemplateItem([schemaItem.schemaType, `market`].join(`-`), {
         market: market.name,
         language: language?.id ?? null,
+        tag: market.tag,
       }),
     ])
 }
@@ -152,5 +152,12 @@ export const structure = (S: StructureBuilder, context: ConfigContext, marketNam
       .items(createAllSchemaItems(S, context, market))
   }
 
-  return S.list().id('root').title('Markets').items(createAllMarketItems(S, context))
+  return S.list()
+    .id('root')
+    .title('Markets')
+    .items([
+      S.listItem().id('tags').title('Tags').child(S.documentTypeList('tag').title('Tags')),
+      S.divider(),
+      ...createAllMarketItems(S, context),
+    ])
 }

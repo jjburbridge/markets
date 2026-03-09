@@ -31,6 +31,40 @@ export default defineType({
       type: 'richText',
     }),
     defineField({
+      name: 'tag',
+      title: 'Tag',
+      type: 'reference',
+      to: [{type: 'tag'}],
+      hidden: ({currentUser}) => !currentUser?.roles?.some((r) => r.name === 'administrator'),
+    }),
+    defineField({
+      name: 'authorisedUsers',
+      title: 'Authorised Users',
+      type: 'object',
+      readOnly: true,
+      hidden: ({currentUser}) => !currentUser?.roles?.some((r) => r.name === 'administrator'),
+      fields: [
+        defineField({
+          name: 'admins',
+          title: 'Admins',
+          type: 'array',
+          of: [{type: 'userSelect'}],
+        }),
+        defineField({
+          name: 'editors',
+          title: 'Editors',
+          type: 'array',
+          of: [{type: 'userSelect'}],
+        }),
+        defineField({
+          name: 'viewers',
+          title: 'Viewers',
+          type: 'array',
+          of: [{type: 'userSelect'}],
+        }),
+      ],
+    }),
+    defineField({
       name: 'language',
       title: 'Language',
       type: 'string',
