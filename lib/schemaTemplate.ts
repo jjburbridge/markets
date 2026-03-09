@@ -16,22 +16,20 @@ export const schemaTemplates = (prev) => [
       {name: `baseLanguage`, title: `Base Language`, type: `string`},
       {name: 'tag', title: 'Tag', type: 'string'},
     ],
-    value: async ({market, language, tag}) => {
-      const client = createClient({
-        apiVersion: '2025-05-08',
-        projectId: process.env.SANITY_STUDIO_SANITY_PROJECT_ID as string,
-        dataset: process.env.SANITY_STUDIO_SANITY_DATASET as string,
-      })
+    value: async ({market, language, tag}, context) => {
+      const client = context.getClient({apiVersion: '2026-03-09', perspective: 'published'})
       const authorisedUsers = await client.fetch<{_id: string; authorisedUsers?: unknown} | null>(
         `*[_type == "tag" && slug.current == $tagSlug][0]{_id, authorisedUsers}`,
-        {tagSlug: tag},
+        {
+          tagSlug: tag,
+        },
       )
       return {
         market,
         language,
         baseLanguage: language,
         tag: {_type: 'reference', _ref: authorisedUsers?._id},
-        authorisedUsers: authorisedUsers?.authorisedUsers,
+        authorisedUsers: authorisedUsers?.authorisedUsers || {},
       }
     },
   })),
