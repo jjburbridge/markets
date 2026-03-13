@@ -82,6 +82,7 @@ const configBase = {
 }
 
 export default defineConfig([
+  configBase,
   ...MARKETS.map((market) => ({
     ...configBase,
     basePath: `/${market.name.toLowerCase()}`,
@@ -89,5 +90,4 @@ export default defineConfig([
     title: [configBase.title, market.title].join(` `),
     plugins: pluginsBase(market.name),
   })),
-  configBase,
 ])
