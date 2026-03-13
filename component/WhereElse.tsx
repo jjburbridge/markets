@@ -20,8 +20,6 @@ const DocLink = ({doc}: {doc: SanityDocumentLike}) => {
 }
 
 export const WhereElse = (props: any) => {
-  console.log(props)
-
   const [sameSlug, setSameSlug] = useState([])
   const client = useClient({apiVersion: '2025-05-08'})
 
