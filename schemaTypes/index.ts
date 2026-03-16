@@ -6,6 +6,8 @@ import {richText} from './objects/richText'
 import collection from './collection'
 import collectionSync from './collectionSync'
 import {migrations} from './migrations'
+import {user} from './user'
+import {post} from './post'
 export const schemaTypes = [
   // Document types
   page,
@@ -14,6 +16,8 @@ export const schemaTypes = [
   collection,
   collectionSync,
   migrations,
+  user,
+  post,
 
   // Object types
   seo,

@@ -10,35 +10,39 @@
     "build": "sanity build",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
-    "migrations:run-all": "sanity exec scripts/run-all-migrations.ts"
+    "migrations:run-all": "sanity exec scripts/run-all-migrations.ts",
+    "exec:external-import": "sanity exec scripts/external-import.ts --with-user-token",
+    "exec:external-import:dry-run": "sanity exec scripts/external-import.ts --with-user-token -- --dry-run",
+    "exec:remove-recent-users-posts": "sanity exec scripts/remove-recent-users-posts.ts --with-user-token",
+    "exec:remove-recent-users-posts:dry-run": "sanity exec scripts/remove-recent-users-posts.ts --with-user-token -- --dry-run"
   },
   "keywords": [
     "sanity"
   ],
   "dependencies": {
-    "@portabletext/editor": "^4.3.1",
-    "@portabletext/toolbar": "^5.0.16",
-    "@sanity/assist": "^5.0.4",
-    "@sanity/client": "^7.14.0",
-    "@sanity/document-internationalization": "^4.1.1",
-    "@sanity/sdk-react": "^2.5.0",
-    "@sanity/vision": "5.5.0",
+    "@portabletext/editor": "^6.4.0",
+    "@portabletext/toolbar": "^7.0.19",
+    "@sanity/assist": "^6.0.2",
+    "@sanity/client": "^7.17.0",
+    "@sanity/document-internationalization": "^6.0.1",
+    "@sanity/sdk-react": "^2.8.0",
+    "@sanity/vision": "5.14.0",
     "html-to-text": "^9.0.5",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "react-icons": "^5.5.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-icons": "^5.6.0",
     "rss-parser": "^3.13.0",
-    "sanity": "5.5.0",
-    "sanity-plugin-internationalized-array": "^3.2.2",
-    "styled-components": "^6.3.8"
+    "sanity": "5.14.0",
+    "sanity-plugin-internationalized-array": "^5.0.1",
+    "styled-components": "^6.3.11"
   },
   "devDependencies": {
-    "@sanity/blueprints": "0.7.1",
+    "@sanity/blueprints": "0.13.1",
     "@sanity/eslint-config-studio": "^6.0.0",
-    "@sanity/functions": "1.1.0",
-    "@types/react": "^19.2.9",
-    "eslint": "^9.39.2",
-    "prettier": "^3.8.0",
+    "@sanity/functions": "1.2.1",
+    "@types/react": "^19.2.14",
+    "eslint": "^10.0.3",
+    "prettier": "^3.8.1",
     "typescript": "^5.9.3"
   },
   "prettier": {
