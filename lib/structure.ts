@@ -7,8 +7,10 @@ import {SchemaSingleton} from './i18n'
 import {SCHEMA_ITEMS} from './i18n'
 
 // Create Items for all Markets
-const createAllMarketItems = (S: StructureBuilder, config: ConfigContext) =>
-  MARKETS.map((market) => createMarketItem(S, config, market))
+const createAllMarketItems = (S: StructureBuilder, config: ConfigContext) => [
+  ...MARKETS.map((market) => createMarketItem(S, config, market)),
+  createMarketItem(S, config, {name: 'all', title: 'All', languages: []}),
+]
 
 // Create an Item for a market
 const createMarketItem = (S: StructureBuilder, config: ConfigContext, market: Market) =>
@@ -45,6 +47,13 @@ const createSchemaItem = (
         )
         .title(schemaItem.title)
         .child(createSchemaItemChildren(S, schemaItem, market))
+    case 'singleton':
+      return S.listItem().title(schemaItem.title).id(schemaItem.schemaType).child(
+        // Instead of rendering a list of documents, we render a single
+        // document, specifying the `documentId` manually to ensure
+        // that we're editing the single instance of the document
+        S.document().schemaType(schemaItem.schemaType).documentId(schemaItem.schemaType),
+      )
     default:
       return null
   }
@@ -86,6 +95,14 @@ const createSchemaItemChild = (
     languageQuery = ``
   }
 
+  if (market.name === 'all') {
+    return S.documentTypeList(schemaItem.schemaType)
+      .title(itemTitle)
+      .filter(`_type == $schemaType`)
+      .params({
+        schemaType: schemaItem.schemaType,
+      })
+  }
   return S.documentTypeList(schemaItem.schemaType)
     .title(itemTitle)
     .filter(

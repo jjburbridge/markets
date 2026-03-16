@@ -1,0 +1,39 @@
+name: List Sanity Migrations
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'migrations/**'
+
+jobs:
+  list-migrations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: List migrations
+        id: migrations
+        env:
+          SANITY_STUDIO_SANITY_PROJECT_ID: ${{ secrets.SANITY_STUDIO_SANITY_PROJECT_ID }}
+          SANITY_STUDIO_SANITY_DATASET: ${{ secrets.SANITY_STUDIO_SANITY_DATASET }}
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+        run: |
+          yarn run migrations:run-all
