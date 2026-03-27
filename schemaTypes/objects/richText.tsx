@@ -1,4 +1,4 @@
-import {FaRegBookmark} from 'react-icons/fa'
+import {FaRegBookmark, FaHourglass} from 'react-icons/fa'
 import {defineField} from 'sanity'
 
 export const richText = defineField({
@@ -6,60 +6,67 @@ export const richText = defineField({
   title: 'Rich Text',
   type: 'array',
   of: [
-    {type: 'block'},
     {
-      type: 'object',
-      name: 'todo',
-      fields: [
-        {name: 'comment', type: 'text'},
-        {name: 'dueDate', type: 'date'},
-      ],
-      components: {
-        // block: (props) => {
-        //   console.log('props', props)
-        //   return (
-        //     <div>
-        //       <FaRegBookmark />
-        //       {props.renderInlineBlock(props)}
-        //     </div>
-        //   )
-        // },
-        block: (props) => {
-          console.log('block props', props)
-          return <>{props.renderDefault(props)}</>
-        },
-        inlineBlock: (props) => {
-          console.log('inlineBlock props', props)
-          return <>{props.renderDefault(props)}</>
-        },
-        input: (props) => {
-          console.log('input props', props)
-          return <>{props.renderDefault(props)}</>
-        },
-        item: (props) => {
-          console.log('item props', props)
-          return <>{props.renderDefault(props)}</>
-        },
-        field: (props) => {
-          console.log('field props', props)
-          return <>{props.renderDefault(props)}</>
-        },
-        annotation: (props) => {
-          console.log('annotation props', props)
-          return <>{props.renderDefault(props)}</>
-        },
-        preview: (props) => {
-          console.log('preview props', props)
-          return (
-            <>
-              {props.actions}
-              <button onClick={() => (props.actions.props.isOpen = true)}>
+      type: 'block',
+      of: [
+        {
+          type: 'object',
+          name: 'todo',
+          icon: FaRegBookmark,
+          fields: [
+            {name: 'comment', type: 'text'},
+            {name: 'dueDate', type: 'date'},
+          ],
+          components: {
+            annotation: (props) => {
+              return (
+                <>
+                  {props.renderDefault(props.children)}
+                  <FaRegBookmark />
+                </>
+              )
+            },
+            preview: () => (
+              <>
                 <FaRegBookmark />
-              </button>
-              {props.renderDefault(props)}
-            </>
-          )
+              </>
+            ),
+          },
         },
+      ],
+      marks: {
+        annotations: [
+          {
+            name: 'link',
+            type: 'object',
+            title: 'link',
+            fields: [
+              {
+                name: 'url',
+                type: 'url',
+              },
+            ],
+          },
+          {
+            type: 'object',
+            name: 'todoHighlight',
+            icon: FaHourglass,
+            fields: [
+              {name: 'comment', type: 'text'},
+              {name: 'dueDate', type: 'date'},
+            ],
+            components: {
+              annotation: (props) => {
+                return (
+                  <>
+                    {props.renderDefault(props)}
+                    <FaHourglass />
+                  </>
+                )
+              },
+            },
+          },
+        ],
       },
     },
   ],
