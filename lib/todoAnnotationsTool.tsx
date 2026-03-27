@@ -287,12 +287,23 @@ function TodoAnnotationsToolComponent() {
                         ? 'Highlighted annotation (todoHighlight)'
                         : 'Todo annotation (mark)'}
                   </Text>
-                  <Box>
+                  <Box style={{minWidth: 0}}>
                     <Text size={1} weight="medium">
                       {row.kind === 'inline' ? 'Surrounding text' : 'Highlighted text'}
                     </Text>
                     <IntentLink intent="edit" params={{id: row.sectionId, type: 'section'}}>
-                      <Code size={2}>{row.highlightedText || '(empty)'}</Code>
+                      <Code
+                        size={2}
+                        style={{
+                          display: 'block',
+                          maxWidth: '100%',
+                          whiteSpace: 'pre-wrap',
+                          overflowWrap: 'break-word',
+                          wordBreak: 'break-word',
+                        }}
+                      >
+                        {row.highlightedText || '(empty)'}
+                      </Code>
                     </IntentLink>
                   </Box>
                   <Box>
