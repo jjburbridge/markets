@@ -1,4 +1,5 @@
-import {defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
+import {MdHome as icon} from 'react-icons/md'
 import {ConditionalArray} from '../component/ConditionalArray'
 import {ArrayItem} from '../component/ArrayItem'
 
@@ -6,40 +7,43 @@ export default defineType({
   name: 'home',
   title: 'Home',
   type: 'document',
+  icon,
   groups: [
-    {
-      name: 'content',
-      title: 'Content',
-    },
-    {
-      name: 'seo',
-      title: 'SEO',
-    },
+    {name: 'content', title: 'Content'},
+    {name: 'seo', title: 'SEO'},
   ],
   fields: [
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
+      validation: (Rule) => Rule.required(),
       group: 'content',
     }),
     defineField({
       name: 'navigation',
       title: 'Navigation',
       type: 'array',
+      group: 'content',
       components: {
         input: ConditionalArray,
       },
       of: [
-        {
+        defineArrayMember({
           type: 'object',
           components: {
             item: ArrayItem,
           },
-          fields: [{type: 'string', name: 'internal'}],
-        },
+          fields: [
+            defineField({
+              name: 'internal',
+              title: 'Internal reference',
+              type: 'string',
+              description: 'Target identifier or path used by the front end',
+            }),
+          ],
+        }),
       ],
-      group: 'content',
     }),
     defineField({
       name: 'language',
@@ -50,7 +54,7 @@ export default defineType({
     }),
     defineField({
       name: 'baseLanguage',
-      title: 'Base Language',
+      title: 'Base language',
       type: 'string',
       readOnly: true,
       group: 'content',
@@ -59,17 +63,18 @@ export default defineType({
       name: 'image',
       title: 'Image',
       type: 'image',
+      group: 'content',
       options: {
         hotspot: true,
       },
       fields: [
         defineField({
           name: 'alt',
-          title: 'Alt',
+          title: 'Alt text',
           type: 'internationalizedArrayString',
+          description: 'Per-locale descriptions for screen readers and broken-image fallback',
         }),
       ],
-      group: 'content',
     }),
     defineField({
       name: 'market',
@@ -86,6 +91,17 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {title: 'title', subtitle: 'market'},
+    select: {
+      title: 'title',
+      market: 'market',
+      media: 'image',
+    },
+    prepare({title, market, media}) {
+      return {
+        title: title || 'Home',
+        subtitle: market || undefined,
+        media,
+      }
+    },
   },
 })

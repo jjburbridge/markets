@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import {MdPerson as icon} from 'react-icons/md'
+import {isSlugUniqueAcross} from './validators/isSlugUniqueAcross'
 
 export default defineType({
   name: 'person',
@@ -11,7 +12,8 @@ export default defineType({
       name: 'name',
       title: 'Name',
       type: 'string',
-      description: 'Please use "Firstname Lastname" format',
+      description: 'Use “Firstname Lastname” format',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'slug',
@@ -21,6 +23,14 @@ export default defineType({
         source: 'name',
         maxLength: 100,
       },
+      validation: (Rule) =>
+        Rule.required().custom(async (slug, context) => {
+          if (!slug?.current) return true
+          if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug.current)) {
+            return 'Use lowercase letters, numbers, and single hyphens only'
+          }
+          return await isSlugUniqueAcross('person')(slug, context)
+        }),
     }),
     defineField({
       name: 'image',
@@ -29,6 +39,22 @@ export default defineType({
       options: {
         hotspot: true,
       },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt text',
+          type: 'string',
+          description: 'Describe the photo for accessibility',
+          validation: (Rule) =>
+            Rule.custom((alt, context) => {
+              const image = context.parent as {asset?: unknown} | undefined
+              if (image?.asset && !alt?.trim()) {
+                return 'Alt text is required when an image is set'
+              }
+              return true
+            }),
+        }),
+      ],
     }),
     defineField({
       name: 'language',
@@ -44,6 +70,10 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {title: 'name', media: 'image'},
+    select: {
+      title: 'name',
+      subtitle: 'market',
+      media: 'image',
+    },
   },
 })
