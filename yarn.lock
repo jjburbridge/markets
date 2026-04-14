@@ -3094,6 +3094,16 @@
     "@sanity/ui" "^2.10.11"
     "@sanity/util" "^3.67.1"
 
+"@sanity/language-filter@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@sanity/language-filter/-/language-filter-5.0.1.tgz#03e29a914cdf8a60f037d6d41b2ab08c7759603c"
+  integrity sha512-mMeApPoJYiNrHxJhcdkz8AW8KblBIWW2hrqKwIKMzi2E7SiGMdcYh97g6quhUO4cWhWvSy13j80OIu400Nl1SQ==
+  dependencies:
+    "@sanity/icons" "^3.7.4"
+    "@sanity/ui" "^3.1.14"
+    react-rx "^4.2.2"
+    rxjs "^7.8.2"
+
 "@sanity/logos@^2.2.2":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@sanity/logos/-/logos-2.2.2.tgz#ba9a5de7629928831fce9421920268ee43c1d501"
@@ -3339,6 +3349,21 @@
   version "3.1.11"
   resolved "https://registry.yarnpkg.com/@sanity/ui/-/ui-3.1.11.tgz#4930bb0934b18f7e5744fe5a2912c4e77af8ee32"
   integrity sha512-UooG4hq0ytUivCe0d5O+QWnG+B6fpuu5npNZNpV9SJNwZNH4hDNbLjnDS8sqEkaYVNhgIS+C26nnkVK134Di4w==
+  dependencies:
+    "@floating-ui/react-dom" "^2.1.6"
+    "@juggle/resize-observer" "^3.4.0"
+    "@sanity/color" "^3.0.6"
+    "@sanity/icons" "^3.7.4"
+    csstype "^3.1.3"
+    motion "^12.23.24"
+    react-compiler-runtime "1.0.0"
+    react-refractor "^4.0.0"
+    use-effect-event "^2.0.3"
+
+"@sanity/ui@^3.1.14":
+  version "3.1.14"
+  resolved "https://registry.yarnpkg.com/@sanity/ui/-/ui-3.1.14.tgz#b34478870305337e125ba9f84c81d9ac28fce6aa"
+  integrity sha512-wpmjQrxerWM0l5NAziazr7q/aUgJBkFHvkBhImlDCzL4teWYLsblFRujTdBHh9CpbcDDa27InQdOBV+RsFBiuw==
   dependencies:
     "@floating-ui/react-dom" "^2.1.6"
     "@juggle/resize-observer" "^3.4.0"
