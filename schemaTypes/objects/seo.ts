@@ -5,11 +5,13 @@ export default defineType({
   name: 'seo',
   title: 'SEO',
   type: 'object',
+  fieldsets: [
+    {name: 'robots', title: 'Robots', options: {columns: 2, collapsible: true, collapsed: true}},
+  ],
   icon,
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
       type: 'string',
       description: 'Overrides the page title in search results and the browser tab if provided',
       validation: (Rule) =>
@@ -17,7 +19,6 @@ export default defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Description',
       type: 'text',
       rows: 3,
       description: 'Summary for search snippets and social previews',
@@ -53,7 +54,6 @@ export default defineType({
     }),
     defineField({
       name: 'keywords',
-      title: 'Keywords',
       type: 'array',
       description: 'Optional; most search engines do not use meta keywords for ranking',
       of: [defineArrayMember({type: 'string'})],
@@ -65,6 +65,7 @@ export default defineType({
       name: 'noIndex',
       title: 'Hide from search engines',
       type: 'boolean',
+      fieldset: 'robots',
       description: 'When enabled, tells crawlers not to index this page',
       initialValue: false,
     }),
@@ -72,6 +73,7 @@ export default defineType({
       name: 'noFollow',
       title: 'No follow links',
       type: 'boolean',
+      fieldset: 'robots',
       description: 'When enabled, suggests crawlers should not follow links on this page',
       initialValue: false,
     }),

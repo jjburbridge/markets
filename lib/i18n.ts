@@ -6,11 +6,12 @@ export type SchemaItem = {
 
 export type SchemaDivider = {
   kind: 'divider'
+  title?: string
 }
 
 export const SCHEMA_ITEMS: (SchemaItem | SchemaDivider)[] = [
   {kind: 'list', schemaType: `home`, title: 'Home'},
   {kind: 'list', schemaType: `person`, title: 'People'},
-  {kind: 'divider'},
+  {kind: 'divider', title: 'Content'},
   {kind: 'list', schemaType: `page`, title: 'Pages'},
 ]

@@ -29,6 +29,12 @@ export default defineType({
       title: 'Slug',
       type: 'slug',
       group: 'content',
+      hidden: (context) => {
+        if (context.document?.title) {
+          return false
+        }
+        return true
+      },
       options: {
         source: 'title',
         maxLength: 100,

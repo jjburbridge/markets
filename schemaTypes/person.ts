@@ -19,6 +19,12 @@ export default defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
+      hidden: (context) => {
+        if (context.document?.name) {
+          return false
+        }
+        return true
+      },
       options: {
         source: 'name',
         maxLength: 100,
@@ -55,6 +61,23 @@ export default defineType({
             }),
         }),
       ],
+    }),
+    defineField({
+      name: 'role',
+      title: 'Role',
+      type: 'string',
+      description: 'The role of the person in the organization',
+      options: {
+        list: [
+          {title: 'CEO', value: 'ceo'},
+          {title: 'CTO', value: 'cto'},
+          {title: 'CFO', value: 'cfo'},
+          {title: 'COO', value: 'coo'},
+          {title: 'Founder', value: 'founder'},
+          {title: 'Other', value: 'other'},
+        ],
+        layout: 'radio',
+      },
     }),
     defineField({
       name: 'language',

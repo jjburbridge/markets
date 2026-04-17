@@ -3,13 +3,13 @@ import {StructureBuilder} from 'sanity/structure'
 import {Language, Market, MARKETS} from './markets'
 import {SchemaDivider} from './i18n'
 import {SchemaItem} from './i18n'
-import {SchemaSingleton} from './i18n'
 import {SCHEMA_ITEMS} from './i18n'
+import {TONE_OF_VOICE_DOCUMENT_ID} from './toneOfVoiceConstants'
 
 // Create Items for all Markets
 const createAllMarketItems = (S: StructureBuilder, config: ConfigContext) => [
   ...MARKETS.map((market) => createMarketItem(S, config, market)),
-  createMarketItem(S, config, {name: 'all', title: 'All', languages: []}),
+  createMarketItem(S, config, {flag: '🌐', name: 'all', title: 'All', languages: []}),
 ]
 
 // Create an Item for a market
@@ -25,19 +25,30 @@ const createMarketItem = (S: StructureBuilder, config: ConfigContext, market: Ma
 
 // Create a list for each Schema in the Market
 const createAllSchemaItems = (S: StructureBuilder, config: ConfigContext, market: Market) =>
-  SCHEMA_ITEMS.map((schemaItem) => createSchemaItem(S, schemaItem, market)).filter(
-    (item) => item !== null,
-  )
+  [
+    ...SCHEMA_ITEMS.map((schemaItem) => createSchemaItem(S, schemaItem, market)).filter(
+      (item) => item !== null,
+    ),
+    S.divider().title('Studio'),
+    S.listItem()
+      .id(`${market.name.toLowerCase()}-tone-of-voice`)
+      .title('Tone of voice')
+      .child(
+        S.document()
+          .schemaType('toneOfVoiceSettings')
+          .documentId(TONE_OF_VOICE_DOCUMENT_ID),
+      ),
+  ]
 
 // Create a schema item for this market for this schema type
 const createSchemaItem = (
   S: StructureBuilder,
-  schemaItem: SchemaItem | SchemaSingleton | SchemaDivider,
+  schemaItem: SchemaItem | SchemaDivider,
   market: Market,
 ) => {
   switch (schemaItem.kind) {
     case 'divider':
-      return S.divider()
+      return S.divider().title(schemaItem.title ?? '')
     case 'list':
       return S.listItem()
         .id(

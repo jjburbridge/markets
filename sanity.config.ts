@@ -11,12 +11,15 @@ import {SCHEMA_ITEMS} from './lib/i18n'
 import {schemaTemplates} from './lib/schemaTemplate'
 import {structure} from './lib/structure'
 import {assist} from '@sanity/assist'
+import {markdownSchema} from 'sanity-plugin-markdown'
+import {ToneOfVoice} from './component/ToneOfVoice'
 
 const pluginsBase = (marketName?: string) => {
   const market = MARKETS.find((m) => m.name === marketName)
 
   // Shared plugins across all "market" configs
   const base = [
+    markdownSchema(),
     structureTool({
       structure: (S, context) => structure(S, context, marketName),
     }),
@@ -76,7 +79,20 @@ const configBase = {
     types: schemaTypes,
     templates: (prev) => schemaTemplates(prev),
   },
+  form: {
+    components: {
+      input: ToneOfVoice,
+    },
+  },
   plugins: pluginsBase(),
+  tools: (prev, context) => {
+    if (
+      context.currentUser?.roles?.some((role: {name?: string}) => role.name === 'administrator')
+    ) {
+      return prev
+    }
+    return prev.filter((tool) => tool.name !== 'vision')
+  },
 }
 
 export default defineConfig([

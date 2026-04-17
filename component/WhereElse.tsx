@@ -20,7 +20,7 @@ const DocLink = ({doc}: {doc: SanityDocumentLike}) => {
 }
 
 export const WhereElse = (props: any) => {
-  console.log(props)
+  // console.log(props)
 
   const [sameSlug, setSameSlug] = useState([])
   const client = useClient({apiVersion: '2025-05-08'})
@@ -43,7 +43,7 @@ export const WhereElse = (props: any) => {
 
   return (
     <>
-      <div>WhereElse</div>
+      {/* <div>WhereElse</div> */}
       {sameSlug.map((item: SanityDocumentLike) => (
         <DocLink doc={item} key={item._id} />
       ))}
