@@ -1,0 +1,36 @@
+{
+  "name": "resources-pdf-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Sanity App SDK app for filtering Resources and generating PDF reports.",
+  "scripts": {
+    "dev": "sanity dev --port 3334",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100,
+    "bracketSpacing": false,
+    "singleQuote": true
+  },
+  "dependencies": {
+    "@react-pdf/renderer": "^4.5.1",
+    "@sanity/icons": "^3.7.4",
+    "@sanity/sdk": "^2.11.0",
+    "@sanity/sdk-react": "^2.11.0",
+    "@sanity/ui": "^3.2.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "sanity": "^5.24.0",
+    "styled-components": "^6.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.7.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^6.0.3"
+  }
+}
