@@ -68,7 +68,7 @@ const configBase = {
   name: 'global',
   projectId: process.env.SANITY_STUDIO_SANITY_PROJECT_ID as string,
   dataset: process.env.SANITY_STUDIO_SANITY_DATASET as string,
-  title: process.env.SANITY_STUDIO_SANITY_PROJECT_TITLE || 'Marketing.',
+  title: process.env.SANITY_STUDIO_SANITY_PROJECT_TITLE || 'Marketing',
   mediaLibrary: {
     enabled: true,
   },
@@ -86,6 +86,27 @@ export default defineConfig([
     name: market.name,
     title: [configBase.title, market.title].join(` `),
     plugins: pluginsBase(market.name),
+    hidden: ({currentUser}) => {
+      console.log('currentUser', currentUser)
+      if (currentUser.roles.some((role) => role.name === 'administrator')) {
+        return false
+      }
+      const langAttribute: string[] =
+        currentUser?.attributes?.find((attribute) => attribute.key === 'lang')?.value || []
+      console.log(
+        'langAttribute',
+        langAttribute,
+        market.languages,
+        market.languages.some((language) => langAttribute.includes(language.id)),
+      )
+      if (
+        langAttribute.length > 0 &&
+        market.languages.some((language) => langAttribute.includes(language.id))
+      ) {
+        return false
+      }
+      return true
+    },
   })),
   configBase,
 ])
