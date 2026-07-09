@@ -10,6 +10,7 @@ import {MARKETS, uniqueLanguagesObject} from './lib/markets'
 import {SCHEMA_ITEMS} from './lib/i18n'
 import {schemaTemplates} from './lib/schemaTemplate'
 import {structure} from './lib/structure'
+import {todoAnnotationsTool} from './lib/todoAnnotationsTool'
 import {assist} from '@sanity/assist'
 
 const pluginsBase = (marketName?: string) => {
@@ -72,6 +73,7 @@ const configBase = {
   mediaLibrary: {
     enabled: true,
   },
+  tools: [todoAnnotationsTool()],
   schema: {
     types: schemaTypes,
     templates: (prev) => schemaTemplates(prev),
