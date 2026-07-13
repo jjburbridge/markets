@@ -11,6 +11,8 @@ import {SCHEMA_ITEMS} from './lib/i18n'
 import {schemaTemplates} from './lib/schemaTemplate'
 import {structure} from './lib/structure'
 import {assist} from '@sanity/assist'
+import {ImageLicenseReport} from './tools/imageLicenseReport'
+import {WarningOutlineIcon} from '@sanity/icons'
 
 const pluginsBase = (marketName?: string) => {
   const market = MARKETS.find((m) => m.name === marketName)
@@ -72,11 +74,31 @@ const configBase = {
   mediaLibrary: {
     enabled: true,
   },
+  form: {
+    // Disable the default for image assets
+    image: {
+      assetSources: (sources: any) =>
+        sources.filter((source: any) => source.name !== 'sanity-default'),
+    },
+    // Disable the default for file assets
+    file: {
+      assetSources: (sources: any) =>
+        sources.filter((source: any) => source.name !== 'sanity-default'),
+    },
+  },
   schema: {
     types: schemaTypes,
-    templates: (prev) => schemaTemplates(prev),
+    templates: (prev: any) => schemaTemplates(prev),
   },
   plugins: pluginsBase(),
+  tools: [
+    {
+      name: 'image-license-report',
+      title: 'Image licenses',
+      icon: WarningOutlineIcon,
+      component: ImageLicenseReport,
+    },
+  ],
 }
 
 export default defineConfig([
@@ -86,13 +108,13 @@ export default defineConfig([
     name: market.name,
     title: [configBase.title, market.title].join(` `),
     plugins: pluginsBase(market.name),
-    hidden: ({currentUser}) => {
+    hidden: ({currentUser}: {currentUser: any}) => {
       console.log('currentUser', currentUser)
-      if (currentUser.roles.some((role) => role.name === 'administrator')) {
+      if (currentUser.roles.some((role: any) => role.name === 'administrator')) {
         return false
       }
       const langAttribute: string[] =
-        currentUser?.attributes?.find((attribute) => attribute.key === 'lang')?.value || []
+        currentUser?.attributes?.find((attribute: any) => attribute.key === 'lang')?.value || []
       console.log(
         'langAttribute',
         langAttribute,

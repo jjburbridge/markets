@@ -57,5 +57,27 @@ export default defineType({
       title: 'SEO',
       type: 'seo',
     }),
+    defineField({
+      name: 'person',
+      title: 'Person',
+      type: 'reference',
+      to: [{type: 'person'}],
+    }),
   ],
+  preview: {
+    select: {
+      // name: 'person.slug.current',
+      title: 'title',
+      subtitle: 'slug.current',
+      media: 'mainImage',
+    },
+    // prepare(selection) {
+    //   const {name, title, subtitle, media} = selection
+    //   return {
+    //     title: title,
+    //     subtitle: subtitle,
+    //     media: media,
+    //   }
+    // },
+  },
 })

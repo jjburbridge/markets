@@ -2,7 +2,7 @@ import {SCHEMA_ITEMS, SchemaItem} from './i18n'
 
 const onlySchemaItems = SCHEMA_ITEMS.filter((item) => item.kind === 'list')
 
-export const schemaTemplates = (prev) => [
+export const schemaTemplates = (prev: any) => [
   ...prev,
   ...onlySchemaItems.map((schemaItem: SchemaItem) => ({
     id: [schemaItem.schemaType, `market`].join(`-`),
@@ -14,6 +14,6 @@ export const schemaTemplates = (prev) => [
       {name: `language`, title: `Language`, type: `string`},
       {name: `baseLanguage`, title: `Base Language`, type: `string`},
     ],
-    value: ({market, language}) => ({market, language, baseLanguage: language}),
+    value: ({market, language}: {market: string, language: string}) => ({market, language, baseLanguage: language}),
   })),
 ]

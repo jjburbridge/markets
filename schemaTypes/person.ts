@@ -28,6 +28,14 @@ export default defineType({
       type: 'image',
       options: {
         hotspot: true,
+        mediaLibrary: {
+          filters: [
+            {
+              name: 'Has Alt Text',
+              query: 'defined(aspects.altText)',
+            },
+          ],
+        },
       },
     }),
     defineField({

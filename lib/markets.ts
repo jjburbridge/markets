@@ -70,3 +70,10 @@ export const uniqueLanguagesObject = MARKETS.reduce((acc: Language[], cur: Marke
 
   return [...acc, ...newLanguages]
 }, [])
+
+export const uniqueLanguagesObjectValues = markets.flatMap((market) =>
+  market.languages.map((language) => ({
+    title: `${language.title}-${market.title}`,
+    value: `${language.id}-${market.name}`,
+  })),
+)

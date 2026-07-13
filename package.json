@@ -15,28 +15,34 @@
     "sanity"
   ],
   "dependencies": {
-    "@portabletext/editor": "^7.0.1",
-    "@sanity/assist": "^6.0.6",
-    "@sanity/client": "^7.22.0",
-    "@sanity/document-internationalization": "^6.2.0",
-    "@sanity/language-filter": "^5.0.2",
-    "@sanity/vision": "5.27.0",
+    "@knocklabs/node": "^1.32.0",
+    "@portabletext/editor": "^7.9.0",
+    "@sanity-labs/react-table-kit": "^1.3.0",
+    "@sanity-labs/sdk-table-kit": "^0.3.2",
+    "@sanity/assist": "^6.1.5",
+    "@sanity/client": "^7.23.0",
+    "@sanity/document-internationalization": "^6.2.11",
+    "@sanity/language-filter": "^5.0.5",
+    "@sanity/sdk": "^2.15.0",
+    "@sanity/sdk-react": "^2.15.0",
+    "@sanity/vision": "6.3.0",
     "html-to-text": "^10.0.0",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "react-icons": "^5.6.0",
+    "nuqs": "^2.9.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-icons": "^5.7.0",
     "rss-parser": "^3.13.0",
-    "sanity": "5.27.0",
-    "sanity-plugin-internationalized-array": "^5.1.2",
-    "styled-components": "^6.4.2"
+    "sanity": "6.3.0",
+    "sanity-plugin-internationalized-array": "^5.1.11",
+    "styled-components": "^6.4.3"
   },
   "devDependencies": {
-    "@sanity/blueprints": "0.19.1",
+    "@sanity/blueprints": "0.21.0",
     "@sanity/eslint-config-studio": "^6.0.0",
-    "@sanity/functions": "1.3.1",
-    "@types/react": "^19.2.15",
-    "eslint": "^10.4.0",
-    "prettier": "^3.8.3",
+    "@sanity/functions": "1.4.0",
+    "@types/react": "^19.2.17",
+    "eslint": "^10.6.0",
+    "prettier": "^3.9.4",
     "typescript": "^6.0.3"
   },
   "prettier": {
@@ -44,6 +50,9 @@
     "printWidth": 100,
     "bracketSpacing": false,
     "singleQuote": true
+  },
+  "resolutions": {
+    "vite": "8.1.0"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
