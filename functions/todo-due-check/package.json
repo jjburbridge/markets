@@ -1,0 +1,8 @@
+{
+  "name": "todo-due-check",
+  "type": "module",
+  "main": "index.ts",
+  "dependencies": {
+    "@sanity/functions": "1.6.2"
+  }
+}

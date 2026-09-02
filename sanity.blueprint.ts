@@ -1,4 +1,4 @@
-import {defineBlueprint, defineDocumentFunction} from '@sanity/blueprints'
+import {defineBlueprint, defineDocumentFunction, defineScheduledFunction} from '@sanity/blueprints'
 
 export default defineBlueprint({
   resources: [
@@ -11,5 +11,15 @@ export default defineBlueprint({
       },
     }),
     defineDocumentFunction({name: 'scrape', event: {on: ['create']}}),
+    defineScheduledFunction({
+      name: 'todo-due-check',
+      event: {expression: 'every day at 9am'},
+      timezone: 'Europe/London',
+      // A schedule has no triggering document, so the function cannot infer the target dataset
+      env: {
+        SANITY_STUDIO_SANITY_PROJECT_ID: process.env.SANITY_STUDIO_SANITY_PROJECT_ID as string,
+        SANITY_STUDIO_SANITY_DATASET: process.env.SANITY_STUDIO_SANITY_DATASET as string,
+      },
+    }),
   ],
 })
